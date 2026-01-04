@@ -1,19 +1,17 @@
 #! /bin/bash
 
 AMI_ID="ami-09c813fb71547fc4f"
-SG_ID="sg-03de6d8134f235f9d"
+SG_ID="sg-03de6d8134f235f9d" # replace with your SG ID
 INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
-ZONE_ID="Z02128863TGJBVW0HWJU6"
-DOMAIN_NAME="sricharan.site"
+ZONE_ID="Z02128863TGJBVW0HWJU6" # replace with your ZONE ID
+DOMAIN_NAME="sricharan.site" # replace with your domain
 
-# for instance in ${INSTANCES[@]}
+#for instance in ${INSTANCES[@]}
 for instance in $@
-do 
-    INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI_ID --instance-type t3.micro --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" --query 'Instances[0].InstanceId' --output text)
-    
-     # Get Private IP
-     if [ $instance != "frontend" ]
-      then
+do
+    INSTANCE_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-type t3.micro --security-group-ids sg-03de6d8134f235f9d --tag-specifications "ResourceType=instance,Tags=[{Key=Name, Value=$instance}]" --query "Instances[0].InstanceId" --output text)
+    if [ $instance != "frontend" ]
+    then
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
         RECORD_NAME="$instance.$DOMAIN_NAME"
     else
@@ -28,7 +26,7 @@ do
     {
         "Comment": "Creating or Updating a record set for cognito endpoint"
         ,"Changes": [{
-        "Action"              : "UPSERT"
+        "Action"              : "CREATE"
         ,"ResourceRecordSet"  : {
             "Name"              : "'$RECORD_NAME'"
             ,"Type"             : "A"
@@ -39,8 +37,4 @@ do
         }
         }]
     }'
-
-
-
-
-done 
+done

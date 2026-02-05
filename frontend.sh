@@ -42,21 +42,21 @@ VALIDATE $? "Enabling Nginx:1.24"
 dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "Installing Nginx"
 
-systemctl enable nginx  &>>$LOG_FILE
+systemctl enable nginx  
 systemctl start nginx 
 VALIDATE $? "Starting Nginx"
 
-rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
+rm -rf /usr/share/nginx/html/* 
 VALIDATE $? "Removing default content"
 
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip 
 VALIDATE $? "Downloading frontend"
 
 cd /usr/share/nginx/html 
-unzip /tmp/frontend.zip &>>$LOG_FILE
+unzip /tmp/frontend.zip 
 VALIDATE $? "unzipping frontend"
 
-rm -rf /etc/nginx/nginx.conf &>>$LOG_FILE
+rm -rf /etc/nginx/nginx.conf 
 VALIDATE $? "Remove default nginx conf"
 
 cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf

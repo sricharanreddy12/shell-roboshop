@@ -81,7 +81,7 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing Mongodb client"
 
 #checking the db data loaded or not --if lessthan 0 , no data loaded ,greater than 0--data loaded
-STATUS=$(mongosh --host mongodb.daws84s.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+STATUS=$(mongosh --host mongodb.sricharan.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 if [ $STATUS -lt 0 ]
 then
     mongosh --host mongodb.sricharan.site </app/db/master-data.js &>>$LOG_FILE

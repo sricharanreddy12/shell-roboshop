@@ -36,14 +36,16 @@ VALIDATE(){
 
 dnf module disable nginx -y &>>$LOG_FILE
 VALIDATE $? "Disabling default Nginx"
+
 dnf module enable nginx:1.24 -y &>>$LOG_FILE
 VALIDATE $? "Enabling Nginx 1.24 Version"
+
 dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "Installing Nginx"
 
 systemctl enable nginx &>>$LOG_FILE
 systemctl start nginx &>>$LOG_FILE
-VALIDATE $? "starting and enabling service"
+VALIDATE $? "starting Nginx"
 
 rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
 VALIDATE $? "Removing default Content"
@@ -58,8 +60,7 @@ VALIDATE $? "Unzipping Frontend content"
 rm -rf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? "Remove default nginx conf"
 
-cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOG_FILE
-VALIDATE $? "copying nginx.conf"
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
 
 systemctl restart nginx &>>$LOG_FILE
 VALIDATE $? "Restarting nginx"

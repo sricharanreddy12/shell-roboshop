@@ -42,9 +42,7 @@ VALIDATE $? "Enabling Nginx:1.24"
 dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "Installing Nginx"
 
-systemctl enable nginx  
-systemctl start nginx 
-VALIDATE $? "Starting Nginx"
+systemctl enable nginx 
 
 rm -rf /usr/share/nginx/html/* 
 VALIDATE $? "Removing default content"
@@ -62,5 +60,8 @@ VALIDATE $? "Remove default nginx conf"
 cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
 VALIDATE $? "Copying nginx.conf"
 
-systemctl restart nginx 
-VALIDATE $? "Restarting nginx"
+nginx -t
+VALIDATE $? "Validating nginx config"
+
+systemctl start nginx
+VALIDATE $? "Starting nginx"
